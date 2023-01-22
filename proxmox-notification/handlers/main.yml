@@ -1,0 +1,10 @@
+---
+- name: restart postfix
+  service:
+    name: postfix
+    state: restarted
+
+# Look into changing this from using the shell module to another internal module.
+- name: send notification
+  shell:  |
+    echo "Proxmox E-Mail Alert Testing." | mail -s "Proxmox Alert Test From Host: {{ inventory_hostname }}" "{{ pve_notify_email }}"

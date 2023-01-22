@@ -1,0 +1,64 @@
+---
+- name: Install Dependencies
+  apt:
+    name: postfix-pcre
+    state: present
+    update_cache: yes
+
+- name: Setup Up E-Mail Password File
+  template:
+    src: postfix_sasl_passwd.j2
+    dest: /etc/postfix/sasl_passwd
+    owner: root
+    group: root
+    mode: 0600
+  notify: 
+    - restart postfix
+    - send notification
+  when: pve_notify_enabled
+  
+- name: Hash E-Mail Password File
+  command: postmap hash:/etc/postfix/sasl_passwd
+  notify: 
+    - restart postfix
+    - send notification
+  when: pve_notify_enabled
+
+- name: Secure E-Mail Password File
+  file: 
+    path: /etc/postfix/sasl_passwd.db
+    owner: root
+    group: root
+    mode: 0600
+  notify: 
+    - restart postfix
+    - send notification
+  when: pve_notify_enabled
+
+- name: Setup Postfix Configuration
+  template:
+    src: postfix_config.j2
+    dest: /etc/postfix/main.cf
+  notify: 
+    - restart postfix
+    - send notification
+  when: pve_notify_enabled
+
+- name: Setup E-Mail SMTP Headers
+  template:
+    src: postfix_smtp_headers.j2
+    dest: /etc/postfix/smtp_header_checks
+    owner: root
+    group: root
+    mode: 0600
+  notify: 
+    - restart postfix
+    - send notification
+  when: pve_notify_enabled
+
+- name: Hash E-Mail SMTP Header File
+  command: postmap hash:/etc/postfix/smtp_header_checks
+  notify: 
+    - restart postfix
+    - send notification
+  when: pve_notify_enabled

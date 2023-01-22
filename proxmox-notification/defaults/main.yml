@@ -1,0 +1,22 @@
+# The variables listed below are what the proxmox-notification role uses to configure postfix.
+# You should define these in your group_vars file.
+
+# Variables used within this role. The four values below are defaults for use with Gmail.
+# You can override these in your group_vars file.
+pve_notify_enabled: false
+pve_notify_host: smtp.gmail.com
+pve_notify_port: 587
+pve_notify_from: "Alert: "
+
+
+# pve_notify_email: someuser@gmail.com
+# pve_notify_password: supersecretpassword
+# pve_notify_app_password: mygmailapppassword
+
+# pve_notify_from is used to set the smtp headers for sent email.
+# When the role is run this value will be combined with the hostname to form the from name.
+
+# An example using the sample value above, the included template would create a 
+# a header that appears as:
+
+# From Name     --> Alert: myhostname
