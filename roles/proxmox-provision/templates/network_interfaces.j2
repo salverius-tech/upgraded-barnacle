@@ -1,0 +1,26 @@
+auto lo
+iface lo inet loopback
+
+iface eno1 inet manual
+
+iface eno2 inet manual
+
+iface eno3 inet manual
+
+iface eno4 inet manual
+
+auto vmbr0
+iface vmbr0 inet static
+    address {{ lookup('dig', ansible_fqdn) }}/24
+    gateway 172.30.100.1
+    bridge-ports eno3
+    bridge-stp off
+    bridge-fd 0
+
+auto vmbr1
+iface vmbr1 inet manual
+    bridge-ports eno1
+    bridge-stp off
+    bridge-fd 0
+    bridge-vlan-aware yes
+    bridge-vids 2-4094

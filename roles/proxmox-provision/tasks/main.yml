@@ -1,0 +1,116 @@
+---
+- name: 01 Remove ProxMox Enterprise repository from sources list using specified filename (Debian 10)
+  ansible.builtin.apt_repository:
+    repo: deb https://enterprise.proxmox.com/debian/pve buster pve-enterprise
+    state: absent
+    filename: pve-enterprise
+  when:
+    - ansible_facts['distribution'] == "Debian"
+    - ansible_facts['distribution_major_version'] == "10"
+
+- name: 02 Remove ProxMox Enterprise repository from sources list using specified filename (Debian 11)
+  ansible.builtin.apt_repository:
+    repo: deb https://enterprise.proxmox.com/debian/pve bullseye pve-enterprise
+    state: absent
+    filename: pve-enterprise
+  when:
+    - ansible_facts['distribution'] == "Debian"
+    - ansible_facts['distribution_major_version'] == "11"
+
+- name: 03 Add ProxMox free repository into sources list using specified filename (Debian 10)
+  ansible.builtin.apt_repository:
+    repo: deb http://download.proxmox.com/debian buster pve-no-subscription
+    state: present
+    filename: pve-install-repo
+  when:
+    - ansible_facts['distribution'] == "Debian"
+    - ansible_facts['distribution_major_version'] == "10"
+
+- name: 04 Add ProxMox free repository into sources list using specified filename (Debian 11)
+  ansible.builtin.apt_repository:
+    repo: deb http://download.proxmox.com/debian/pve bullseye pve-no-subscription
+    state: present
+    filename: pve-install-repo
+  when:
+    - ansible_facts['distribution'] == "Debian"
+    - ansible_facts['distribution_major_version'] == "11"
+
+- name: 05 Update apt-get repo and cache
+  ansible.builtin.apt:
+    update_cache: yes
+    force_apt_get: yes
+    cache_valid_time: 3600
+
+- name: 06 Upgrade all apt packages
+  ansible.builtin.apt:
+    upgrade: dist
+    force_apt_get: yes
+
+- name: 07 Remove Subscription Nag Message
+  replace:
+    path: /usr/share/javascript/proxmox-widget-toolkit/proxmoxlib.js
+    regexp: 'res[\s\n]*\.data\.status\.toLowerCase\(\) !== .active.'
+    replace: "false"
+    backup: yes
+  notify: restart pveproxy
+
+- name: 08 Install Dependencies
+  apt:
+    name: "{{ proxmox_dependencies }}"
+    state: present
+    update_cache: yes
+
+- name: 09 Install Ansible Dependencies
+  pip:
+    name: "{{ proxmox_ansible_dependencies }}"
+    state: latest
+
+- name: 10 Setting up SSH Configuration
+  replace:
+    path: /etc/ssh/sshd_config
+    regexp: GSSAPIAuthentication yes
+    replace: GSSAPIAuthentication no
+  notify: restart sshd
+
+- name: 11 Create ansible admin group
+  group:
+    name: "{{ proxmox_ansibleadmin_group }}"
+    state: present
+
+- name: 12 Create ansible admin account
+  user:
+    name: "{{ proxmox_ansibleadmin_ssh_user }}"
+    password: "{{ proxmox_ansibleadmin_ssh_passhash }}"
+    createhome: yes
+    comment: "Privileged User"
+    group: "{{ proxmox_ansibleadmin_group }}"
+    groups: sudo
+    append: yes
+    shell: /bin/bash
+    state: present
+
+- name: 13 Deploy SSH Public Key for ansible admin user
+  authorized_key:
+    user: "{{ proxmox_ansibleadmin_ssh_user }}"
+    state: present
+    key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_ed25519.pub') }}"
+
+- name: 14 Setup Networking
+  template:
+    src: network_interfaces.j2
+    dest: /etc/network/interfaces
+
+  # Create a list of current storage for the host
+  # then create a conditional check to see if storage
+  # to be added already exists in the list.
+- name: 15 Attach NFS Storage
+  command: pvesm add nfs {{ item.key }} --path {{ item.value.path }} --server {{ item.value.server }} --export {{ item.value.export }} --content {{ item.value.content }}
+  with_dict: "{{ proxmox_storage }}"
+
+# - name: 15 PCI Passthrough Setup for nxs-pve-a
+- include_tasks: nxs-pve-a-passthrough.yml
+  when: ansible_hostname == "nxs-pve-a"
+
+- name: 16 Creating Birth Certificate for Server
+  shell:  |
+    date > /etc/birth_certificate
