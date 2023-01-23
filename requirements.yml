@@ -1,0 +1,4 @@
+---
+roles:
+  - geerlingguy.docker
+  - mirceanton.proxmox_dark_theme

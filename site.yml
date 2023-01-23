@@ -1,0 +1,17 @@
+---
+- hosts: "proxmox_servers"
+  become: yes
+  gather_facts: yes
+  roles:
+    - proxmox-provision
+    - proxmox-notification
+    - mirceanton.proxmox_dark_theme
+
+# This reboot task should probably go inside the proxmox-provision role.
+# In order to make testing easier on me, I have it here.
+- hosts: "proxmox_servers"
+  become: yes
+  gather_facts: yes
+  tasks:
+    - name: Reboot Proxmox Host
+      command: shutdown -r 

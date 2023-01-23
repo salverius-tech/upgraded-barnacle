@@ -1,0 +1,37 @@
+---
+ansible_ssh_user: "{{ vault_proxmox_host_adminuser }}"
+ansible_ssh_pass: "{{ vault_proxmox_host_password }}"
+
+proxmox_ansibleadmin_group: ansibleadmin
+proxmox_ansibleadmin_ssh_user: "{{ vault_admin_ssh_user }}"
+proxmox_ansibleadmin_ssh_passhash: "{{ vault_admin_ssh_passhash }}"
+
+proxmox_dependencies:
+  - sudo
+  - libsasl2-modules
+  - python3-apt
+  - python3-pip
+  - python3-dev
+  - build-essential
+
+proxmox_ansible_dependencies:
+  - virtualenv
+  - proxmoxer
+
+proxmox_storage:
+  vm-backups:
+    server: 192.168.10.40
+    path: /mnt/pve/vm-backups
+    export: /mnt/Backups/pve
+    content: backup
+  vm-storage:
+    server: 192.168.10.41
+    path: /mnt/pve/vm-storage
+    export: /mnt/vm-storage
+    content: iso,snippets,backup,images,vztmpl,rootdir
+
+# Proxmox-Notification Role Values
+pve_notify_enabled: true
+pve_notify_email: "{{ nxs_email }}"
+pve_notify_password: "{{ nxs_email_password }}"
+pve_notify_app_password: "{{ nxs_app_password }}" 

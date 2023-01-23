@@ -1,0 +1,20 @@
+---
+ansible_user: ansibleusername
+ansible_become_pass: "ansibleuserpassword"
+
+su_password: supassword
+
+nxs_email: someemailaddress@gmail.com
+nxs_email_password: somesupersecretreallylongpassword
+nxs_app_password: gmailapppassword
+
+vault_proxmox_host_adminuser: root
+vault_proxmox_host_username: root@pam
+vault_proxmox_host_password: supersecretpassword
+vault_proxmox_host_passhash: supersecretpasswordhash
+vault_proxmox_su_password: proxmoxsupassword
+
+vault_admin_ssh_user: adminsshuser
+vault_admin_ssh_pass: supersecretpassword
+vault_admin_ssh_passhash: supersecretpasswordhash
+vault_admin_ssh_key: admin ssh key contents

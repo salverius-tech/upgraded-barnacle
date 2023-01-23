@@ -1,0 +1,4 @@
+[proxmox_servers]
+pve-a   ansible_host=192.168.10.20
+pve-b   ansible_host=192.168.10.21
+pve-c   ansible_host=192.168.10.22
