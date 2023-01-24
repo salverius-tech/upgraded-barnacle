@@ -100,17 +100,20 @@
     src: network_interfaces.j2
     dest: /etc/network/interfaces
 
+- name: 15 Change content type of local storage to accomodate snippets
+  command: pvesm set local --content iso,snippets,backup,vztmpl
+
   # Create a list of current storage for the host
   # then create a conditional check to see if storage
   # to be added already exists in the list.
-- name: 15 Attach NFS Storage
+- name: 16 Attach NFS Storage
   command: pvesm add nfs {{ item.key }} --path {{ item.value.path }} --server {{ item.value.server }} --export {{ item.value.export }} --content {{ item.value.content }}
   with_dict: "{{ proxmox_storage }}"
 
-# - name: 15 PCI Passthrough Setup for nxs-pve-a
-- include_tasks: nxs-pve-a-passthrough.yml
-  when: ansible_hostname == "nxs-pve-a"
+# - name: 17 PCI Passthrough Setup for pve-a
+- include_tasks: pve-a-passthrough.yml
+  when: ansible_hostname == "pve-a"
 
-- name: 16 Creating Birth Certificate for Server
+- name: 18 Creating Birth Certificate for Server
   shell:  |
     date > /etc/birth_certificate
