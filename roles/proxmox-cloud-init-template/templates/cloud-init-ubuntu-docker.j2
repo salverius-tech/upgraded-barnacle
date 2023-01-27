@@ -1,0 +1,51 @@
+#cloud-config
+manage_etc_hosts: true
+chpasswd:
+  expire: False
+users:
+  - name: {{ admin_ssh_user }}
+    shell: /bin/bash
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    ssh_authorized_keys:
+      - {{ admin_ssh_key }}
+      
+package_upgrade: true
+packages:
+  - apt-transport-https
+  - bmon
+  - bwm-ng
+  - curl
+  - git
+  - htop
+  - iftop
+  - iotop
+  - libpam-systemd
+  - locales-all
+  - locate
+  - make
+  - nano
+  - net-tools
+  - ntpdate
+  - nfs-common
+  - nfs4-acl-tools
+  - qemu-guest-agent
+  - rsync
+  - screen
+  - software-properties-common
+  - strace
+  - sysstat
+  - snmpd
+  - sudo
+  - tcpdump
+  - tmux
+  - tree
+  - vlan
+  - vnstat
+runcmd:
+  - snap remove lxd
+  - snap remove core18
+  - snap remove snapd
+  - apt purge snapd -y
+  - apt autoremove -y
+  - apt autoclean -y
+  - hostnamectl set-hostname svc-docker-`ip -o addr show dev "eth0" | awk '$3 == "inet" {print $4}' | sed -r 's!/.*!!; s!.*\.!!'`

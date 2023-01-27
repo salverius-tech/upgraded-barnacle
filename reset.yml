@@ -1,0 +1,10 @@
+---
+- hosts: "proxmox_servers"
+  become: yes
+  gather_facts: yes
+  tasks:
+
+    - name: Destroy Templates
+      shell: |
+        qm destroy 10000
+        qm destroy 10001

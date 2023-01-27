@@ -24,3 +24,6 @@ update-servers:
 
 check-syntax:
 	ansible-playbook site.yml -b --vault-password-file .vault-password --syntax-check
+
+reset:
+	ansible-playbook reset.yml -b --vault-password-file .vault-password

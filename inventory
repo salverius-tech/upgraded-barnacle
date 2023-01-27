@@ -2,3 +2,7 @@
 pve-a   ansible_host=192.168.10.20
 pve-b   ansible_host=192.168.10.21
 pve-c   ansible_host=192.168.10.22
+
+[proxmox_template_host]
+pve-a   ansible_host=172.30.100.71
+pve-b   ansible_host=172.30.100.72

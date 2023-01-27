@@ -1,0 +1,3 @@
+---
+- include_tasks: create-cloud-init-template.yml
+  with_dict: "{{ proxmox_templates }}"

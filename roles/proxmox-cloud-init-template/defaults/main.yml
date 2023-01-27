@@ -1,0 +1,26 @@
+# admin_ssh_user:
+# admin_ssh_key:
+
+# proxmox_template_storage:
+
+# proxmox_templates:
+#   template-docker-host:
+#     id: 10000
+#     ram: 4096
+#     network_bridge: vmbr1
+#     vlan: 100
+#     imageurl: https://cloud-images.ubuntu.com/jammy/current/jammy-server-cloudimg-amd64.img
+#     imagefile: /tmp/jammy-server-cloudimg-amd64.img
+#     cicustom: "user=local:snippets/cloud-init-ubuntu-docker.yml"
+#     templatefile: cloud-init-ubuntu-docker.j2
+#     cidestination: /var/lib/vz/snippets/cloud-init-ubuntu-docker.yml
+#   template-ubuntu-vm:
+#     id: 10001
+#     ram: 8192
+#     network_bridge: vmbr1
+#     vlan: 100
+#     imageurl: https://cloud-images.ubuntu.com/jammy/current/jammy-server-cloudimg-amd64.img
+#     imagefile: /tmp/jammy-server-cloudimg-amd64.img
+#     cicustom: "user=local:snippets/cloud-init-ubuntu.yml"
+#     templatefile: cloud-init-ubuntu.j2
+#     cidestination: /var/lib/vz/snippets/cloud-init-ubuntu.yml

@@ -1,0 +1,35 @@
+---
+admin_ssh_user: "{{ vault_admin_ssh_user }}"
+admin_ssh_pass: "{{ vault_admin_ssh_pass }}"
+admin_ssh_key:  "{{ vault_admin_ssh_key }}"
+
+proxmox_host_username: "{{ vault_proxmox_host_username }}"
+proxmox_host_password: "{{ vault_proxmox_host_password }}"
+
+# Need to research and figure out why setting this to anything
+# other than local-lvm causes the attach storage play to fail.
+
+# proxmox_template_storage: vm-storage
+proxmox_template_storage: local-lvm
+
+proxmox_templates:
+  template-docker-host:
+    id: 10000
+    ram: 4096
+    network_bridge: vmbr1
+    vlan: 100
+    imageurl: https://cloud-images.ubuntu.com/jammy/current/jammy-server-cloudimg-amd64.img
+    imagefile: /tmp/jammy-server-cloudimg-amd64.img
+    cicustom: "user=local:snippets/cloud-init-ubuntu-docker.yml"
+    templatefile: cloud-init-ubuntu-docker.j2
+    cidestination: /var/lib/vz/snippets/cloud-init-ubuntu-docker.yml
+  template-ubuntu-vm:
+    id: 10001
+    ram: 8192
+    network_bridge: vmbr1
+    vlan: 100
+    imageurl: https://cloud-images.ubuntu.com/jammy/current/jammy-server-cloudimg-amd64.img
+    imagefile: /tmp/jammy-server-cloudimg-amd64.img
+    cicustom: "user=local:snippets/cloud-init-ubuntu.yml"
+    templatefile: cloud-init-ubuntu.j2
+    cidestination: /var/lib/vz/snippets/cloud-init-ubuntu.yml

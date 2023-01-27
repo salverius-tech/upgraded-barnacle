@@ -14,4 +14,11 @@
   gather_facts: yes
   tasks:
     - name: Reboot Proxmox Host
-      command: shutdown -r 
+      reboot:
+        reboot_timeout: 3600
+
+- hosts: "proxmox_template_host"
+  become: yes
+  gather_facts: yes
+  roles:
+    - proxmox-cloud-init-template

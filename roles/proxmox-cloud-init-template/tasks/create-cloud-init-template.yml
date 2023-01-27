@@ -1,0 +1,55 @@
+---
+- name: "[{{ item.key }}] Check Proxmox Host For Existence of Template."
+  shell: qm list | grep -q -e {{ item.key }} -e {{ item.value.id }}
+  register: _proxmox_template_exists
+  failed_when: _proxmox_template_exists.rc not in [0,1]
+
+- name: "[{{ item.key }}] Create Cloud Init file on Proxmox Host"
+  when: 
+  - _proxmox_template_exists.rc == 1
+  block:
+
+  - name: "[{{ item.key }}] Create Cloud Init file on Proxmox Host"
+    template:
+      src: "{{ item.value.templatefile }}"
+      dest: "{{ item.value.cidestination }}"
+      owner: root
+      group: www-data
+      mode: 0644
+
+  - name: "[{{ item.key }}] Download Cloud Init image"
+    get_url:
+      url: "{{ item.value.imageurl }}"
+      dest: "{{ item.value.imagefile }}"
+
+  - name: "[{{ item.key }}] Create new VM (with explicit VLAN)"
+    command: qm create {{ item.value.id | quote}} --name {{ item.key }} --memory {{ item.value.ram }} --net0 virtio,bridge={{ item.value.network_bridge }},tag={{ item.value.vlan }}
+    when: item.value.vlan is defined
+
+  - name: "[{{ item.key }}] Create new VM (without explicit VLAN)"
+    command: qm create {{ item.value.id | quote}} --name {{ item.key }} --memory {{ item.value.ram }} --net0 virtio,bridge={{ item.value.network_bridge }}
+    when: item.value.vlan is not defined
+
+  - name: "[{{ item.key }}] Import cloud-init image into disk"
+    command: qm importdisk {{ item.value.id | quote}} {{ item.value.imagefile }} {{ proxmox_template_storage }}
+
+  - name: "[{{ item.key }}] Attach disk to template VM"
+    command: qm set {{ item.value.id | quote}} --scsihw virtio-scsi-pci --scsi0 {{ proxmox_template_storage }}:vm-{{ item.value.id | quote}}-disk-0   
+
+  - name: "[{{ item.key }}] Create CDROM image to pass cloud-init params to template VM"
+    command: qm set {{ item.value.id | quote}} --ide2 {{ proxmox_template_storage }}:cloudinit    
+
+  - name: "[{{ item.key }}] Set template VM to boot from hard disk only (speeds up boot)"
+    command: qm set {{ item.value.id | quote}} --boot c --bootdisk scsi0
+
+  - name: "[{{ item.key }}] Add a serial console to the template for good measure"
+    command: qm set {{ item.value.id | quote}} --serial0 socket --vga serial0
+  
+  - name: "[{{ item.key }}] Enable qemu-guest-agent"
+    command: qm set {{ item.value.id | quote}} -agent enabled=1
+
+  - name: "[{{ item.key }}] custom integrations"
+    command: qm set {{ item.value.id | quote}} --cicustom "{{ item.value.cicustom }}"
+
+  - name: "[{{ item.key }}] Turn VM into template"
+    command: qm template {{ item.value.id | quote}}
