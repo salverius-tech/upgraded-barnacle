@@ -4,5 +4,18 @@ pve-b   ansible_host=192.168.10.21
 pve-c   ansible_host=192.168.10.22
 
 [proxmox_template_host]
-pve-a   ansible_host=172.30.100.71
-pve-b   ansible_host=172.30.100.72
+pve-a   ansible_host=192.68.100.20
+pve-b   ansible_host=192.68.100.21
+
+[proxmox_vms]
+svc-mgmt    ansible_host=192.168.100.100
+svc-core    ansible_host=192.168.100.101
+svc-house   ansible_host=192.168.30.11
+svc-dev     ansible_host=192.168.20.50
+svc-test    ansible_host=192.168.40.100
+
+[docker_hosts]
+svc-mgmt    ansible_host=192.168.100.100
+svc-core    ansible_host=192.168.100.101
+svc-house   ansible_host=192.168.30.11
+svc-dev     ansible_host=192.168.20.50

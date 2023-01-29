@@ -1,0 +1,26 @@
+terraform {
+  required_providers {
+    proxmox = {
+      source  = "telmate/proxmox"
+      version = ">= 2.9.10"
+    }
+  }
+}
+
+{% set hostnodes = [] %}
+{% for key, vm in proxmox_vms.items() %}
+  {% if vm.pvehost not in hostnodes %}
+    {{ hostnodes.append(vm.pvehost) }}
+  {% endif %}
+{% endfor %}
+{% for pvenode in hostnodes %}
+provider "proxmox" {
+    alias = "{{ pvenode }}"
+    pm_api_url = "https://{{ pvenode }}:8006/api2/json"
+    pm_user = "{{ proxmox_host_username }}"
+    pm_tls_insecure = true
+    pm_password = "{{ proxmox_host_password }}"
+    pm_timeout = 600
+    pm_otp = ""    
+}
+{% endfor %}

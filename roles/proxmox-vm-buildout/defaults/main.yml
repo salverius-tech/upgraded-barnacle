@@ -1,0 +1,32 @@
+# admin_ssh_user: "{{ vault_admin_ssh_user }}"
+# admin_ssh_pass: "{{ vault_admin_ssh_pass }}"
+# admin_ssh_key:  "{{ vault_admin_ssh_key }}"
+
+# proxmox_host_username: "{{ vault_proxmox_host_username }}"
+# proxmox_host_password: "{{ vault_proxmox_host_password }}"
+
+# proxmox_vms:
+#   svc-core:
+#     pvehost: pve-a  
+#     id: 5001
+#     ram: 8192
+#     cores: 6
+#     vlan: 100
+#     vlan_gway: 192.168.100.1
+#     disksize: 50G
+#     cicustom: "user=local:snippets/cloud-init.yml"
+#     storage: local-lvm
+#     net_bridge: vmbr1
+#     template: template-docker-host
+#   svc-core:
+#     pvehost: pve-a  
+#     id: 5001
+#     ram: 8192
+#     cores: 6
+#     vlan: 100
+#     vlan_gway: 192.168.100.1
+#     disksize: 50G
+#     cicustom: "user=local:snippets/cloud-init.yml"
+#     storage: local-lvm
+#     net_bridge: vmbr1
+#     template: template-docker-host

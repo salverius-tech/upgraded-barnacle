@@ -4,7 +4,25 @@
   gather_facts: yes
   tasks:
 
-    - name: Destroy Templates
+    - name: "Destroy Templates"
       shell: |
         qm destroy 10000
         qm destroy 10001
+
+    - name: "Destroy nxs-pve-a virtual machines"
+      shell: |
+        qm stop 5000
+        qm stop 5001
+        qm stop 5002
+        qm destroy 5000
+        qm destroy 5001
+        qm destroy 5002
+      when: ansible_hostname == "pve-a"
+
+    - name: "Destroy nxs-pve-b virtual machines"
+      shell: |
+        qm stop 5003
+        qm stop 5004
+        qm destroy 5003
+        qm destroy 5004
+      when: ansible_hostname == "pve-b"

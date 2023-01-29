@@ -1,0 +1,79 @@
+---
+terraform_dir: "/tmp/.terraform/{{ admin_ssh_user }}"
+
+ansible_ssh_user: "{{ vault_admin_ssh_user }}"
+ansible_ssh_pass: "{{ vault_admin_ssh_pass }}"
+
+admin_ssh_user: "{{ vault_admin_ssh_user }}"
+admin_ssh_pass: "{{ vault_admin_ssh_pass }}"
+admin_ssh_key:  "{{ vault_admin_ssh_key }}"
+
+proxmox_host_username: "{{ vault_proxmox_host_username }}"
+proxmox_host_password: "{{ vault_proxmox_host_password }}"
+
+proxmox_vms:
+  svc-mgmt:
+    pvehost: pve-a  
+    id: 5000
+    ram: 8192
+    cores: 4
+    vlan: 100
+    vlan_gway: 192.168.100.1
+    ip: 192.168.100.100
+    disksize: 150G
+    cicustom: "user=local:snippets/cloud-init-ubuntu-docker.yml"
+    storage: local-lvm
+    net_bridge: vmbr1
+    template: template-docker-host
+  svc-core:
+    pvehost: pve-a  
+    id: 5001
+    ram: 8192
+    cores: 6
+    vlan: 100
+    vlan_gway: 192.168.100.1
+    ip: 192.168.100.101
+    disksize: 50G
+    cicustom: "user=local:snippets/cloud-init-ubuntu-docker.yml"
+    storage: local-lvm
+    net_bridge: vmbr1
+    template: template-docker-host
+  svc-house:
+    pvehost: pve-a  
+    id: 5002
+    ram: 8192
+    cores: 6
+    vlan: 30
+    vlan_gway: 192.168.30.1
+    ip: 192.168.30.11
+    disksize: 50G
+    cicustom: "user=local:snippets/cloud-init-ubuntu-docker.yml"
+    storage: local-lvm
+    net_bridge: vmbr1
+    template: template-docker-host
+  svc-dev:
+    pvehost: pve-b
+    id: 5003
+    ram: 8192
+    cores: 4
+    vlan: 20
+    vlan_gway: 192.168.20.1
+    ip: 192.168.20.50
+    disksize: 50G
+    cicustom: "user=local:snippets/cloud-init-ubuntu-docker.yml"
+    storage: local-lvm
+    net_bridge: vmbr1
+    template: template-docker-host
+  svc-test:
+    pvehost: pve-b
+    id: 5004
+    ram: 4096
+    cores: 4
+    vlan: 40
+    vlan_gway: 192.168.40.1
+    ip: 192.168.40.100
+    disksize: 50G
+    cicustom: "user=local:snippets/cloud-init-ubuntu.yml"
+    storage: local-lvm
+    net_bridge: vmbr1
+    template: template-ubuntu-vm

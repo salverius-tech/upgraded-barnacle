@@ -27,3 +27,6 @@ check-syntax:
 
 reset:
 	ansible-playbook reset.yml -b --vault-password-file .vault-password
+	
+prepare-localhost:
+	ansible-playbook ./playbooks/prepare-localhost.yml -b --vault-password-file .vault-password
