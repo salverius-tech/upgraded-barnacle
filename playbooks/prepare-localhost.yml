@@ -1,0 +1,18 @@
+---
+- hosts: "proxmox_servers"
+  become: yes
+  gather_facts: no
+  tasks:
+    - name: Remove ssh entries
+      delegate_to: localhost
+      command: ssh-keygen -f "/home/admin/.ssh/known_hosts" -R "{{ ansible_host }}"
+
+- hosts: localhost
+  tasks:
+    - name: Install Dependencies
+      apt:
+        name:
+        - gnupg
+        - software-properties-common
+        state: present
+        update_cache: yes
