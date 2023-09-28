@@ -5,7 +5,6 @@
   roles:
     - proxmox-provision
     - proxmox-notification
-    - mirceanton.proxmox_dark_theme
 
 # This reboot task should probably go inside the proxmox-provision role.
 # In order to make testing easier on me, I have it here.
@@ -29,8 +28,17 @@
   roles:
     - proxmox-vm-buildout
   
-- hosts: "docker_hosts"
+- hosts: "proxmox_vms"
   become: yes
   gather_facts: yes
+  tasks:
+    - name: Reboot Virtual Machines
+      reboot:
+        reboot_timeout: 3600
+
+- hosts: "docker_hosts"
+  become: true
+  gather_facts: true
   roles:
     - geerlingguy.docker
+    - docker-provision

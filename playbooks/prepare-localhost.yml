@@ -14,5 +14,6 @@
         name:
         - gnupg
         - software-properties-common
+        - py3-dnspython
         state: present
         update_cache: yes

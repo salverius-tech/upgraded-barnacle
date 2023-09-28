@@ -1,3 +1,6 @@
 ---
 ansible_ssh_user: "{{ vault_admin_ssh_user }}"
 ansible_ssh_pass: "{{ vault_admin_ssh_pass }}"
+admin_ssh_passhash: "{{ vault_admin_ssh_passhash }}"
+ansible_user: "{{ vault_admin_ssh_user }}"
+docker_users: "{{ vault_admin_ssh_user }}"

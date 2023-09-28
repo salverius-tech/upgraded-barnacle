@@ -35,3 +35,4 @@ pve_notify_enabled: true
 pve_notify_email: "{{ nxs_email }}"
 pve_notify_password: "{{ nxs_email_password }}"
 pve_notify_app_password: "{{ nxs_app_password }}" 
+pve_notify_discord_webhook: "{{ nxs_discord_webhook }}" 

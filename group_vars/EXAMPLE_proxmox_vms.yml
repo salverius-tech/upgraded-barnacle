@@ -11,6 +11,15 @@ admin_ssh_key:  "{{ vault_admin_ssh_key }}"
 proxmox_host_username: "{{ vault_proxmox_host_username }}"
 proxmox_host_password: "{{ vault_proxmox_host_password }}"
 
+starship_dir: "/home/{{ vault_admin_ssh_user }}/.config"
+bash_aliases_path: "/home/{{ vault_admin_ssh_user }}/.bash_aliases"
+
+bash_aliases:
+  - alias: l
+    command: ls --color -lha --group-directories-first
+  - alias: update
+    command: sudo apt update && sudo apt upgrade -y
+
 proxmox_vms:
   svc-mgmt:
     pvehost: pve-a  
