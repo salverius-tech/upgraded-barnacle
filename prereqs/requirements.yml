@@ -1,0 +1,11 @@
+# # https://galaxy.ansible.com/oefenweb/postfix
+# - src: oefenweb.postfix
+
+# https://galaxy.ansible.com/artis3n/tailscale
+- src: artis3n.tailscale
+
+# # https://galaxy.ansible.com/ecgalaxy/aws_cli
+# - src: ecgalaxy.aws_cli
+
+- src: geerlingguy.docker
+# - src: geerlingguy.node_exporter

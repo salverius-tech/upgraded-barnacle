@@ -1,4 +1,8 @@
 galaxy_roles
+
 .vault-password
-roles/geerlingguy.docker
-roles/mirceanton.proxmox_dark_theme
+.prereqs
+
+books/roles/artis3n.tailscale
+books/roles/geerlingguy.docker
+books/roles/mirceanton.proxmox_dark_theme

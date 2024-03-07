@@ -1,0 +1,6 @@
+- hosts: "{{ ansible_override_hosts | default('all') }}"
+  become: false
+  gather_facts: false
+  vars_files: "../sites/{{ lookup('env', 'SITE') }}/vault.yml"
+  roles:
+    - ssh-keys

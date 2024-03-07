@@ -1,0 +1,11 @@
+---
+- hosts: "{{ ansible_override_hosts | default('proxmox_servers') }}"
+  become: true
+  gather_facts: true
+  vars_files: "../sites/{{ lookup('env', 'SITE') }}/vault.yml"
+  tasks:
+    - name: Update Proxmox Servers
+      apt:
+        autoclean: yes
+        update_cache: yes
+        upgrade: yes

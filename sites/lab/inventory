@@ -1,0 +1,51 @@
+[all:vars]
+ansible_user='theboss'
+ansible_ssh_user='{{ vault_admin_ssh_user }}'
+ansible_ssh_pass='{{ vault_admin_ssh_pass }}'
+admin_ssh_key='{{ vault_admin_ssh_key }}'
+
+[servers:vars]
+#ansible_user='theboss'
+# ansible_ssh_user='{{ vault_admin_ssh_user }}'
+# ansible_ssh_pass='{{ vault_admin_ssh_pass }}'
+# admin_ssh_key='{{ vault_admin_ssh_key }}'
+
+[servers:children]
+proxmox_servers
+proxmox_vms
+
+[proxmox_servers:vars]
+ansible_user='root'
+#ansible_ssh_user='{{ vault_proxmox_host_adminuser }}'
+#ansible_ssh_pass='{{ vault_proxmox_host_password }}'
+ansible_ssh_user='{{ vault_admin_ssh_user }}'
+ansible_ssh_pass='{{ vault_admin_ssh_pass }}'
+admin_ssh_key='{{ vault_admin_ssh_key }}'
+
+[proxmox_vms:vars]
+ansible_user='theboss'
+ansible_ssh_user='{{ vault_admin_ssh_user }}'
+ansible_ssh_pass='{{ vault_admin_ssh_pass }}'
+admin_ssh_key='{{ vault_admin_ssh_key }}'
+
+[proxmox_servers]
+pve-a   ansible_host=192.168.10.20
+pve-b   ansible_host=192.168.10.21
+pve-c   ansible_host=192.168.10.22
+
+[proxmox_template_host]
+pve-a   ansible_host=192.68.100.20
+pve-b   ansible_host=192.68.100.21
+
+[proxmox_vms]
+svc-mgmt    ansible_host=192.168.100.100
+svc-core    ansible_host=192.168.100.101
+svc-house   ansible_host=192.168.30.11
+svc-dev     ansible_host=192.168.20.50
+svc-test    ansible_host=192.168.40.100
+
+[docker_hosts]
+svc-mgmt    ansible_host=192.168.100.100
+svc-core    ansible_host=192.168.100.101
+svc-house   ansible_host=192.168.30.11
+svc-dev     ansible_host=192.168.20.50
